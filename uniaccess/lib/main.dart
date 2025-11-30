@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:uniaccess/screens/student_login.dart';
+import 'package:uniaccess/screens/admin_login_screen.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const UniAccessApp());
 }
 
 class UniAccessApp extends StatelessWidget {
-  const UniAccessApp({Key? key}) : super(key: key);
+  const UniAccessApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,7 @@ class UniAccessApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   final Color utBlue = const Color(0xFF005A9C);
   final Color bisGreen = const Color(0xFF00AEEF);
@@ -46,10 +53,7 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 32,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -78,7 +82,12 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
                       onPressed: () {
-                        // Aquí puedes conectar la pantalla administrativa
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AdminLoginScreen(),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.admin_panel_settings),
                       label: const Text('Perfil Administrativo'),

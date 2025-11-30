@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "37107639852",
+    "project_id": "uniaccess-27506",
+    "storage_bucket": "uniaccess-27506.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37107639852:android:ed0c0059b7636a959e9389",
+        "android_client_info": {
+          "package_name": "com.example.uniaccess"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKN4IXL0PBMlBBTU7wEIzAQRNKCXHNQpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37107639852:android:0a483265286c11a39e9389",
+        "android_client_info": {
+          "package_name": "com.uniaccess.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKN4IXL0PBMlBBTU7wEIzAQRNKCXHNQpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

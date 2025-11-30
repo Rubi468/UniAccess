@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uniaccess/screens/qr_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uniaccess/screens/generar_qr_screen.dart';
 
 class StudentProfileScreen extends StatefulWidget {
   const StudentProfileScreen({super.key});
@@ -14,42 +15,55 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
   final List<String> alumnos = [];
   String? edificioSeleccionado;
 
-  // Lista de edificios tal cual me la diste
   final List<String> edificios = [
-    'Edificio A',
-    'Edificio B',
-    'Edificio C',
-    'Edificio D',
-    'Edificio E',
-    'Edificio F',
-    'Edificio G',
-    'Edificio H',
-    'Edificio I',
-    'Edificio J',
-    'Edificio K',
-    'Edificio M',
+    'Edificio A', 'Edificio B', 'Edificio C', 'Edificio D',
+    'Edificio E', 'Edificio F', 'Edificio G', 'Edificio H',
+    'Edificio I', 'Edificio J', 'Edificio K', 'Edificio M',
   ];
 
   final Color utBlue = const Color(0xFF005A9C);
 
-  void generarQR() {
-    if (alumnos.isEmpty || edificioSeleccionado == null) {
+  Future<void> guardarYMostrarQR() async {
+    final placas = placasController.text.trim();
+    final edificio = edificioSeleccionado!;
+
+    final datos = {
+      'matriculas': alumnos,
+      'placas': placas,
+      'edificio': edificio,
+      'timestamp': Timestamp.now(),
+    };
+
+    try {
+      await FirebaseFirestore.instance.collection('registros').add(datos);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GenerarQRScreen(
+            alumnos: alumnos,
+            placas: placas,
+            edificio: edificio,
+          ),
+        ),
+      );
+    } catch (e) {
+      print('Error al guardar en Firestore: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Agrega al menos un alumno y selecciona un edificio')),
+        const SnackBar(content: Text('Error al guardar el registro')),
+      );
+    }
+  }
+
+  void validarYGenerarQR() {
+    if (alumnos.isEmpty || edificioSeleccionado == null || placasController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Completa todos los campos antes de continuar')),
       );
       return;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => QRScreen(
-          alumnos: alumnos,
-          placas: placasController.text.trim(),
-          edificio: edificioSeleccionado ?? '',
-        ),
-      ),
-    );
+    guardarYMostrarQR();
   }
 
   @override
@@ -123,7 +137,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
               ),
               const SizedBox(height: 24),
               ElevatedButton.icon(
-                onPressed: generarQR,
+                onPressed: validarYGenerarQR,
                 icon: const Icon(Icons.qr_code),
                 label: const Text('Generar Código QR'),
                 style: ElevatedButton.styleFrom(
