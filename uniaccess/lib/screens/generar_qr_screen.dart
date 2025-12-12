@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class GenerarQRScreen extends StatelessWidget {
+class GenerarQRScreen extends StatefulWidget {
   final List<String> alumnos;
   final String placas;
   final String edificio;
@@ -15,11 +15,22 @@ class GenerarQRScreen extends StatelessWidget {
     required this.edificio,
   });
 
-  Future<void> guardarRegistro() async {
+  @override
+  State<GenerarQRScreen> createState() => _GenerarQRScreenState();
+}
+
+class _GenerarQRScreenState extends State<GenerarQRScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _guardarRegistro(); // ✅ Se guarda solo una vez al entrar
+  }
+
+  Future<void> _guardarRegistro() async {
     final datos = {
-      'matriculas': alumnos,
-      'placas': placas,
-      'edificio': edificio,
+      'matriculas': widget.alumnos,
+      'placas': widget.placas.isEmpty ? 'N/A' : widget.placas,
+      'edificio': widget.edificio.isEmpty ? 'N/A' : widget.edificio,
       'timestamp': Timestamp.now(),
     };
 
@@ -32,15 +43,12 @@ class GenerarQRScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Generamos el string para el QR
+    // Generamos el string JSON para el QR
     final datosQR = jsonEncode({
-      'matriculas': alumnos,
-      'placas': placas.isEmpty ? 'N/A' : placas,
-      'edificio': edificio.isEmpty ? 'N/A' : edificio,
+      'matriculas': widget.alumnos,
+      'placas': widget.placas.isEmpty ? 'N/A' : widget.placas,
+      'edificio': widget.edificio.isEmpty ? 'N/A' : widget.edificio,
     });
-
-    // Guardamos en Firestore al entrar a esta pantalla
-    guardarRegistro();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Código QR Generado')),
@@ -56,16 +64,22 @@ class GenerarQRScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
+
+              /// QR generado con JSON
               QrImageView(
                 data: datosQR,
                 version: QrVersions.auto,
                 size: 250.0,
               ),
+
               const SizedBox(height: 20),
-              Text('Alumnos: ${alumnos.length}'),
-              Text('Placas: ${placas.isEmpty ? 'N/A' : placas}'),
-              Text('Edificio: ${edificio.isEmpty ? 'N/A' : edificio}'),
+              Text('Alumnos: ${widget.alumnos.length}'),
+              Text('Placas: ${widget.placas.isEmpty ? 'N/A' : widget.placas}'),
+              Text('Edificio: ${widget.edificio.isEmpty ? 'N/A' : widget.edificio}'),
+
               const SizedBox(height: 40),
+
+              /// Botón para volver y crear otro registro
               ElevatedButton.icon(
                 onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.restart_alt),

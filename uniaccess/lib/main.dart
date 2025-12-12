@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:uniaccess/screens/student_login.dart';
 import 'package:uniaccess/screens/admin_login_screen.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   final Color utBlue = const Color(0xFF005A9C);
-  final Color bisGreen = const Color(0xFF00AEEF);
+  final Color bisBlue = const Color(0xFF00AEEF);
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +59,8 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Image.asset('assets/ut_logo.png', height: 100),
                     const SizedBox(height: 32),
+
+                    /// Botón perfil estudiante
                     ElevatedButton.icon(
                       onPressed: () {
                         Navigator.push(
@@ -80,6 +82,8 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
+
+                    /// Botón perfil administrativo
                     ElevatedButton.icon(
                       onPressed: () {
                         Navigator.push(

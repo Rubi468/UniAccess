@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uniaccess/screens/admin_qr_screen.dart'; // ✅ Importación necesaria
+import 'package:uniaccess/screens/admin_qr_screen.dart';
+import 'package:uniaccess/screens/historial_screen.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -23,14 +24,24 @@ class AdminDashboardScreen extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.85,
             child: Card(
               elevation: 12,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('Panel Administrativo', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Panel Administrativo',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 24),
+
+                    /// Botón para escanear QR
                     ElevatedButton.icon(
                       onPressed: () {
                         Navigator.push(
@@ -47,9 +58,14 @@ class AdminDashboardScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
+
+                    /// Botón para ver registros
                     ElevatedButton.icon(
                       onPressed: () {
-                        // Aquí irá la navegación a ver registros
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const HistorialScreen()),
+                        );
                       },
                       icon: const Icon(Icons.assignment),
                       label: const Text('Ver Registros'),
