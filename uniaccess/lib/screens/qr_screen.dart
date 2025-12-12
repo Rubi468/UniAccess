@@ -50,8 +50,13 @@ class _QRScreenState extends State<QRScreen> {
 
     try {
       await FirebaseFirestore.instance.collection('registros').add(datos);
+
+      // No hay uso de context aquí, así que no hay problema
     } catch (e) {
       debugPrint('Error al guardar en Firestore: $e');
+
+      if (!mounted) return; // ✅ Verifica que el widget sigue montado
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error al guardar el registro')),
       );

@@ -2,19 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'admin_dashboard_screen.dart';
 
-class ConfirmacionScreen extends StatelessWidget {
+class ConfirmacionScreen extends StatefulWidget {
   final Map<String, dynamic> datosQR;
 
   const ConfirmacionScreen({super.key, required this.datosQR});
 
-  Future<void> _guardarRegistro(BuildContext context, String estado) async {
+  @override
+  State<ConfirmacionScreen> createState() => _ConfirmacionScreenState();
+}
+
+class _ConfirmacionScreenState extends State<ConfirmacionScreen> {
+  Future<void> _guardarRegistro(String estado) async {
     await FirebaseFirestore.instance.collection('registros').add({
-      'matriculas': datosQR['matriculas'] ?? [],
-      'placas': datosQR['placas'] ?? 'N/A',
-      'edificio': datosQR['edificio'] ?? 'N/A',
+      'matriculas': widget.datosQR['matriculas'] ?? [],
+      'placas': widget.datosQR['placas'] ?? 'N/A',
+      'edificio': widget.datosQR['edificio'] ?? 'N/A',
       'estado': estado,
       'hora': DateTime.now().toIso8601String(),
     });
+
+    if (!mounted) return; // ✅ Verifica que el widget sigue montado
 
     Navigator.pushAndRemoveUntil(
       context,
@@ -25,9 +32,9 @@ class ConfirmacionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> matriculas = datosQR['matriculas'] ?? [];
-    final String placas = datosQR['placas'] ?? 'N/A';
-    final String edificio = datosQR['edificio'] ?? 'N/A';
+    final List<dynamic> matriculas = widget.datosQR['matriculas'] ?? [];
+    final String placas = widget.datosQR['placas'] ?? 'N/A';
+    final String edificio = widget.datosQR['edificio'] ?? 'N/A';
 
     return Scaffold(
       backgroundColor: const Color(0xFF005A9C),
@@ -74,7 +81,7 @@ class ConfirmacionScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () => _guardarRegistro(context, 'Rechazado'),
+                    onPressed: () => _guardarRegistro('Rechazado'),
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     child: const Text('Rechazar'),
                   ),
@@ -82,7 +89,7 @@ class ConfirmacionScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () => _guardarRegistro(context, 'Verificado'),
+                    onPressed: () => _guardarRegistro('Verificado'),
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                     child: const Text('Verificar'),
                   ),

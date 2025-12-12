@@ -20,10 +20,15 @@ class _AdminRecoverScreenState extends State<AdminRecoverScreen> {
 
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: correo);
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Instrucciones enviadas al correo')),
       );
     } catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
@@ -73,14 +78,14 @@ class _AdminRecoverScreenState extends State<AdminRecoverScreen> {
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton(
-                      onPressed: enviarInstrucciones,
-                      child: const Text('Enviar Instrucciones'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: utBlue,
                         foregroundColor: Colors.white,
                         minimumSize: const Size(double.infinity, 50),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
+                      onPressed: enviarInstrucciones,
+                      child: const Text('Enviar Instrucciones'), // ✅ child al final
                     ),
                     const SizedBox(height: 12),
                     const Text(

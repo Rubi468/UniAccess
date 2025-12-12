@@ -29,16 +29,19 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
           password: contrasenaController.text.trim(),
         );
 
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Inicio de sesión exitoso')),
         );
 
-        // ✅ Navegación al Panel Administrativo
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
         );
       } catch (e) {
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Usuario o contraseña incorrectos')),
         );
@@ -95,14 +98,14 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton(
-                        onPressed: iniciarSesion,
-                        child: const Text('Iniciar Sesión'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: utBlue,
                           foregroundColor: Colors.white,
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
+                        onPressed: iniciarSesion,
+                        child: const Text('Iniciar Sesión'), // ✅ child al final
                       ),
                       const SizedBox(height: 12),
                       TextButton(

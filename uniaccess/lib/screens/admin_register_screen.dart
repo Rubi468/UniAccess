@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uniaccess/screens/admin_login_screen.dart'; // Importación necesaria
+import 'package:uniaccess/screens/admin_login_screen.dart';
 
 class AdminRegisterScreen extends StatefulWidget {
   const AdminRegisterScreen({super.key});
@@ -49,6 +49,8 @@ class _AdminRegisterScreenState extends State<AdminRegisterScreen> {
           'timestamp': Timestamp.now(),
         });
 
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Cuenta creada exitosamente')),
         );
@@ -56,7 +58,10 @@ class _AdminRegisterScreenState extends State<AdminRegisterScreen> {
         // Navegación simulada al dashboard
         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AdminDashboardScreen()));
       } catch (e) {
-        print('Error: $e');
+        debugPrint('Error: $e'); // ✅ reemplaza print
+
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error al registrar: $e')),
         );
@@ -129,13 +134,13 @@ class _AdminRegisterScreenState extends State<AdminRegisterScreen> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: registrarAdministrador,
-                child: const Text('Crear Cuenta'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: utBlue,
                   foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 50),
                 ),
+                onPressed: registrarAdministrador,
+                child: const Text('Crear Cuenta'), // ✅ child al final
               ),
               const SizedBox(height: 12),
               TextButton(

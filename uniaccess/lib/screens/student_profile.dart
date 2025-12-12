@@ -37,6 +37,8 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     try {
       await FirebaseFirestore.instance.collection('registros').add(datos);
 
+      if (!mounted) return; // ✅ evita usar context si el widget fue desmontado
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -48,7 +50,9 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
         ),
       );
     } catch (e) {
-      print('Error al guardar en Firestore: $e');
+      if (!mounted) return;
+
+      debugPrint('Error al guardar en Firestore: $e'); // ✅ reemplaza print
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error al guardar el registro')),
       );
@@ -118,7 +122,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
               const Text('Edificio Destino', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: edificioSeleccionado,
+                initialValue: edificioSeleccionado, // ✅ corrección aplicada
                 items: edificios.map((edificio) {
                   return DropdownMenuItem(
                     value: edificio,
